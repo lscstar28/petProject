@@ -1,5 +1,33 @@
 package com.member.dao;
 
-public class MemberDAO {
+import java.io.IOException;
+import java.io.Reader;
 
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+
+
+
+
+
+import com.memeber.dto.MemberDTO;
+
+public class MemberDAO {
+	private static SqlSessionFactory factory;
+	static {
+		try {
+			String resource="mybatis/mybatis-config.xml";
+			Reader reader=Resources.getResourceAsReader(resource);
+			factory=new SqlSessionFactoryBuilder().build(reader);
+		}catch(IOException e) {}
+	}
+	public MemberDTO getLoginUser(String id, String pwd) {
+		SqlSession session=factory.openSession();
+		LoginDTO dto=new LoginDTO(id,pwd,"",0);
+		LoginDTO entity=session.selectOne("mybatis.LoginMapper.getLoginUser", dto);
+		session.close();
+		return entity;		
+	}
 }
