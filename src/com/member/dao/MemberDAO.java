@@ -20,10 +20,14 @@ public class MemberDAO {
 			factory=new SqlSessionFactoryBuilder().build(reader);
 		}catch(IOException e) {}
 	}
-	public MemberDTO getLoginUser(String id, String pwd) {
+	
+	
+	public MemberDTO getLoginUser(String id, String pw) {
 		SqlSession session=factory.openSession();
-		LoginDTO dto=new LoginDTO(id,pwd,"",0);
-		LoginDTO entity=session.selectOne("mybatis.LoginMapper.getLoginUser", dto);
+		MemberDTO dto=new MemberDTO();
+		dto.setId(id);
+		dto.setPw(pw);
+		MemberDTO entity=session.selectOne("mybatis.LoginMapper.getLoginUser", dto);
 		session.close();
 		return entity;		
 	}
